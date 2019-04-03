@@ -10,6 +10,10 @@ firebaseAdmin.initializeApp({
     credential: firebaseAdmin.credential.cert(accountKey),
 });
 
+/**
+ * For Google OAuth. Get access token to use for interaction with Firebase
+ * @returns {Promise<string>}
+ */
 function getAccessToken() {
     return new Promise(function(resolve, reject) {
         let jwtClient = new google.auth.JWT(
@@ -30,21 +34,43 @@ function getAccessToken() {
 }
 
 /**
+ * Trigger Firebase Cloud Messaging to send notification to user
+ * @param {Object} message Notification payload to send
+ */
+function sendNotification(message) {
+    firebaseAdmin.messaging().send(message)
+        .then((response) => {
+            // Response is a message ID string.
+            console.log('Successfully sent message:', response);
+        })
+        .catch((error) => {
+            console.log('Error sending message:', error);
+        });
+}
+
+/**
  * Verifies that the necessary values fot Firebase Cloud Messaging are provided.
  * @param body
  * @returns {boolean}
  */
 function verifyParameters(body) {
-    //TODO:
-    return true
+    return body.hasOwnProperty('data') && body.hasOwnProperty('token') && body.hasOwnProperty('topic') && body.hasOwnProperty('condition')
+}
+
+/**
+ * Parse body.data to JSON
+ * @param {Object} body
+ * @returns {Object}
+ */
+function parseBody(body) {
+    body.data = JSON.parse(body.data);
+    return body;
 }
 
 router.post('/', function(req, res, next) {
-    console.log(req.body);
-    getAccessToken().then(console.log);
     if (verifyParameters(req.body)) {
-        //    TODO: make call to Firebase Cloud Messaging here
-        //      FCM documentation: https://firebase.google.com/docs/cloud-messaging/auth-server
+        let message = parseBody(req.body);
+        sendNotification(message);
         res.status(202).send();
     } else {
         res.status(400).send()
