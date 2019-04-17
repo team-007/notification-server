@@ -18,7 +18,7 @@ app.use(cookieParser());
 app.use('/', indexRouter);
 app.use('/notify', notificationRouter);
 app.use('/authenticate', authRouter);
-app.use('/retrieveToken', retrieveTokenRouter)
+app.use('/retrieveToken', retrieveTokenRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

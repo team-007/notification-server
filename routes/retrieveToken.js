@@ -7,7 +7,10 @@ function verifyRequest(body) {
 
 router.post('/', (request, response) => {
     if (!verifyRequest(request.body)) response.status(400).send();
-    let content = request.body.token
+    let content = request.body.token;
+    console.log("Retrieved token: ", content);
     //TODO: Save Token to Given Location
     response.status(202).send();
-})
+});
+
+module.exports = router;
