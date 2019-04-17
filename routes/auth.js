@@ -24,8 +24,9 @@ function getUser(username, password) {
 }
 
 router.post('/', function(req, res, next) {
-    if (!verifyRequest(req.body)) res.status(400).send();
+    if (!verifyRequest(req.body)) return res.status(400).send();
     let user = getUser(req.body.username, req.body.password);
+    user['token'] = new Date().getTime();
     res.set('Content-Type', 'application/json');
     res.status(202).send(user);
 });
