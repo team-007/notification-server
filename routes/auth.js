@@ -1,5 +1,7 @@
 const express = require('express');
 const router = express.Router();
+const jsonfile = require('jsonfile');
+const path = require('path');
 
 /**
  * Verify that request contains username and password
@@ -17,18 +19,32 @@ function verifyRequest(body) {
  * @returns {Object} Represents the user
  */
 function getUser(username, password) {
-    let users = [
-        {username: 'test', password: 'test', created: '01-01-2019'},
-        {username: 'test1', password: 'test1', created: '01-02-2019'}];
-    return users.find(user => user.username === username && user.password === password);
+    return new Promise((resolve, reject) => {
+        let dbPath = path.join(__dirname, '../db.json');
+        jsonfile.readFile(dbPath)
+            .then(users => {
+                let user = users.find(eachUser => eachUser.username === username && eachUser.password === password);
+                if (!user) return reject('User not found');
+                resolve(user);
+            })
+            .catch(error => {
+                reject('Error opening database file');
+            });
+    });
 }
 
 router.post('/', function(req, res, next) {
     if (!verifyRequest(req.body)) return res.status(400).send();
-    let user = getUser(req.body.username, req.body.password);
-    user['token'] = new Date().getTime();
-    res.set('Content-Type', 'application/json');
-    res.status(202).send(user);
+    getUser(req.body.username, req.body.password)
+        .then(user => {
+            res.set('Content-Type', 'application/json');
+            res.status(202).send(user);
+        })
+        .catch(error => {
+            console.error(error);
+            res.status(400).send(`Error getting user ${req.body.username} from database file`);
+        });
+
 });
 
 module.exports = router;
