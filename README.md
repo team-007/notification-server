@@ -44,7 +44,7 @@ Expected parameters:
 
 Example: 
 
-`curl -d 'username=joe&data={"code":"1234","expire":"10min"' -X POST https://tokeniq.herokuapp.com/notify`
+`curl -d 'username=joe&data={"code":"1234","expire":"10min"}' -X POST https://tokeniq.herokuapp.com/notify`
 
 ## Authentication
 
