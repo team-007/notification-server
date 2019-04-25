@@ -32,7 +32,7 @@ router.post('/', (request, response) => {
         username: request.body.username,
         password: request.body.password,
         created: new Date().toString(),
-        usertoken: new Date().getTime()
+        token: new Date().getTime()
     };
     getUsers()
         .then(users =>{
