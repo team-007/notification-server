@@ -2,6 +2,6 @@ node_modules/
 .idea/
 public/
 views/error.pug
-tokeniqcapstone-firebase-adminsdk-1vdls-e27bb723f1.json
+key.json
 package-lock.json
 gitpush.sh
