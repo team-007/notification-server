@@ -9,6 +9,7 @@ let notificationRouter = require('./routes/notifier');
 let authRouter = require('./routes/auth');
 let retrieveTokenRouter = require('./routes/retrieveToken');
 let createUserRouter = require('./routes/createUser');
+let verify2fa = require('./routes/verify2fa');
 
 let app = express();
 
@@ -25,6 +26,7 @@ app.use('/notify', notificationRouter);
 app.use('/authenticate', authRouter);
 app.use('/retrieveToken', retrieveTokenRouter);
 app.use('/create', createUserRouter);
+app.use('/verify2fa', verify2fa);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

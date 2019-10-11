@@ -1,15 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const firebaseAdmin = require('firebase-admin');
 const {google} = require('googleapis');
 const path = require('path');
 const jsonfile = require('jsonfile');
-
-let accountKey = require(path.join(__dirname, '../tokeniqcapstone-firebase-adminsdk-1vdls-e27bb723f1.json'));
-
-firebaseAdmin.initializeApp({
-    credential: firebaseAdmin.credential.cert(accountKey),
-});
+const firebaseAdmin = require('../firebaseAdmin').admin();
 
 /**
  * Trigger Firebase Cloud Messaging to send notification to user
